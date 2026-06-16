@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -14,7 +14,15 @@ import {
   Zap,
   Image as ImageIcon,
   Settings2,
+  Palette,
 } from "lucide-react";
+
+type Theme = "default" | "sunset" | "neon";
+const THEMES: { id: Theme; label: string }[] = [
+  { id: "default", label: "Midnight" },
+  { id: "sunset", label: "Sunset" },
+  { id: "neon", label: "Neon" },
+];
 import {
   convertArchive,
   DEVICE_SIZES,
@@ -55,8 +63,28 @@ function Index() {
   const [result, setResult] = useState<{ url: string; name: string; pages: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [theme, setTheme] = useState<Theme>("default");
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const saved = (localStorage.getItem("m2pdf-theme") as Theme) || "default";
+    setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    if (theme === "default") {
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+    localStorage.setItem("m2pdf-theme", theme);
+  }, [theme]);
+
+  const cycleTheme = () => {
+    const i = THEMES.findIndex((t) => t.id === theme);
+    setTheme(THEMES[(i + 1) % THEMES.length].id);
+  };
 
   const reset = () => {
     if (result) URL.revokeObjectURL(result.url);
@@ -125,9 +153,22 @@ function Index() {
             Manga<span className="text-gradient">2PDF</span>
           </div>
         </div>
-        <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground font-mono">
-          <span className="size-2 rounded-full bg-success animate-pulse" />
-          100% client-side · zero upload
+        <div className="flex items-center gap-3">
+          <button
+            onClick={cycleTheme}
+            className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-mono hover:bg-muted/50 transition"
+            title="Cambia tema"
+          >
+            <Palette className="size-3.5 text-primary" />
+            <span className="hidden sm:inline">Tema:</span>
+            <span className="font-semibold">
+              {THEMES.find((t) => t.id === theme)?.label}
+            </span>
+          </button>
+          <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground font-mono">
+            <span className="size-2 rounded-full bg-success animate-pulse" />
+            100% client-side
+          </div>
         </div>
       </header>
 
