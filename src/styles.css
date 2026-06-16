@@ -148,7 +148,6 @@
   --shadow-glow: 0 0 50px oklch(0.72 0.28 330 / 0.5);
   --shadow-elevated: 0 30px 80px -20px oklch(0 0 0 / 0.7);
 }
-}
 
 @layer utilities {
   .glass {
