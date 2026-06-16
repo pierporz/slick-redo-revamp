@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -14,7 +14,15 @@ import {
   Zap,
   Image as ImageIcon,
   Settings2,
+  Palette,
 } from "lucide-react";
+
+type Theme = "default" | "sunset" | "neon";
+const THEMES: { id: Theme; label: string }[] = [
+  { id: "default", label: "Midnight" },
+  { id: "sunset", label: "Sunset" },
+  { id: "neon", label: "Neon" },
+];
 import {
   convertArchive,
   DEVICE_SIZES,
