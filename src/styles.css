@@ -89,7 +89,6 @@
     min-height: 100vh;
   }
 }
-@layer base {
 /* Theme: Sunset — warm light/cream with coral & amber */
 :root[data-theme="sunset"] {
   --background: oklch(0.97 0.02 70);
