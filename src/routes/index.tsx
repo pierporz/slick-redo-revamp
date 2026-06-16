@@ -153,9 +153,22 @@ function Index() {
             Manga<span className="text-gradient">2PDF</span>
           </div>
         </div>
-        <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground font-mono">
-          <span className="size-2 rounded-full bg-success animate-pulse" />
-          100% client-side · zero upload
+        <div className="flex items-center gap-3">
+          <button
+            onClick={cycleTheme}
+            className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-mono hover:bg-muted/50 transition"
+            title="Cambia tema"
+          >
+            <Palette className="size-3.5 text-primary" />
+            <span className="hidden sm:inline">Tema:</span>
+            <span className="font-semibold">
+              {THEMES.find((t) => t.id === theme)?.label}
+            </span>
+          </button>
+          <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground font-mono">
+            <span className="size-2 rounded-full bg-success animate-pulse" />
+            100% client-side
+          </div>
         </div>
       </header>
 
