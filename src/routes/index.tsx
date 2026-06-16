@@ -140,7 +140,7 @@ function Index() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-mono mb-6">
             <Sparkles className="size-3 text-primary" />
-            CBZ / ZIP → PDF ottimizzato
+            CBZ / ZIP / CBR / RAR → PDF ottimizzato
           </div>
           <h1 className="font-display text-5xl sm:text-7xl font-bold tracking-tight leading-[1.05]">
             I tuoi manga,
@@ -212,7 +212,7 @@ function Index() {
                       Trascina qui il tuo archivio
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
-                      oppure clicca per sceglierlo · CBZ, ZIP
+                      oppure clicca per sceglierlo · CBZ, ZIP, CBR, RAR
                     </div>
                   </div>
                 )}
