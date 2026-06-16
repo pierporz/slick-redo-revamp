@@ -90,7 +90,7 @@
   }
 }
 /* Theme: Sunset — warm light/cream with coral & amber */
-:root[data-theme="sunset"] {
+html[data-theme="sunset"] {
   --background: oklch(0.97 0.02 70);
   --foreground: oklch(0.22 0.04 30);
   --card: oklch(1 0 0);
@@ -120,7 +120,7 @@
 }
 
 /* Theme: Neon — vibrant violet/magenta cyberpunk */
-:root[data-theme="neon"] {
+html[data-theme="neon"] {
   --background: oklch(0.13 0.04 300);
   --foreground: oklch(0.98 0.01 300);
   --card: oklch(0.19 0.05 300);
