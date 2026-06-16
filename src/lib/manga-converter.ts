@@ -85,20 +85,45 @@ export async function convertArchive(
   onArchiveProgress?.(0, 1);
 
   const lower = file.name.toLowerCase();
-  if (lower.endsWith(".cbr") || lower.endsWith(".rar")) {
-    throw new Error(
-      "Gli archivi RAR/CBR non sono supportati nel browser. Convertili in CBZ/ZIP e riprova.",
-    );
-  }
-  if (!lower.endsWith(".cbz") && !lower.endsWith(".zip")) {
-    throw new Error("Formato non supportato. Usa CBZ o ZIP.");
+  const isRar = lower.endsWith(".cbr") || lower.endsWith(".rar");
+  const isZip = lower.endsWith(".cbz") || lower.endsWith(".zip");
+  if (!isRar && !isZip) {
+    throw new Error("Formato non supportato. Usa CBZ, ZIP, CBR o RAR.");
   }
 
   onLog?.("[STEP] Lettura archivio...");
-  const zip = await JSZip.loadAsync(file);
-  const entries = Object.values(zip.files)
-    .filter((e) => !e.dir && IMG_EXT.test(e.name))
-    .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  let entries: { name: string; getBlob: () => Promise<Blob> }[];
+
+  if (isZip) {
+    const zip = await JSZip.loadAsync(file);
+    entries = Object.values(zip.files)
+      .filter((e) => !e.dir && IMG_EXT.test(e.name))
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
+      .map((e) => ({ name: e.name, getBlob: () => e.async("blob") }));
+  } else {
+    const { createExtractorFromData } = await import("node-unrar-js");
+    const wasmBinary = await (await fetch(wasmUrl)).arrayBuffer();
+    const data = await file.arrayBuffer();
+    const extractor = await createExtractorFromData({ wasmBinary, data });
+    const list = extractor.getFileList();
+    const headers = [...list.fileHeaders].filter(
+      (h) => !h.flags.directory && IMG_EXT.test(h.name),
+    );
+    headers.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+    const names = headers.map((h) => h.name);
+    const extracted = extractor.extract({ files: names });
+    const filesArr = [...extracted.files];
+    entries = filesArr
+      .filter((f) => f.extraction)
+      .map((f) => {
+        const u8 = f.extraction as Uint8Array;
+        const ab = u8.buffer.slice(u8.byteOffset, u8.byteOffset + u8.byteLength) as ArrayBuffer;
+        return {
+          name: f.fileHeader.name,
+          getBlob: async () => new Blob([ab]),
+        };
+      });
+  }
 
   if (entries.length === 0) throw new Error("Nessuna immagine trovata nell'archivio.");
   onLog?.(`[INFO] Immagini trovate: ${entries.length}`);
@@ -109,7 +134,7 @@ export async function convertArchive(
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
     try {
-      const blob = await entry.async("blob");
+      const blob = await entry.getBlob();
       const img = await loadImage(blob);
       const dataUrl = await renderPage(img, maxW, maxH, grayscale);
       const { w, h } = fitInto(img.naturalWidth, img.naturalHeight, maxW, maxH);
