@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import { jsPDF } from "jspdf";
+import wasmUrl from "node-unrar-js/dist/js/unrar.wasm?url";
 
 export type DeviceTarget = "generic" | "kindle" | "kobo" | "ipad" | "tablet7";
 
