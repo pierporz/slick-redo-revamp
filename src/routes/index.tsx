@@ -63,8 +63,28 @@ function Index() {
   const [result, setResult] = useState<{ url: string; name: string; pages: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [theme, setTheme] = useState<Theme>("default");
   const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const saved = (localStorage.getItem("m2pdf-theme") as Theme) || "default";
+    setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    if (theme === "default") {
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+    localStorage.setItem("m2pdf-theme", theme);
+  }, [theme]);
+
+  const cycleTheme = () => {
+    const i = THEMES.findIndex((t) => t.id === theme);
+    setTheme(THEMES[(i + 1) % THEMES.length].id);
+  };
 
   const reset = () => {
     if (result) URL.revokeObjectURL(result.url);
