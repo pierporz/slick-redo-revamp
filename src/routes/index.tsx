@@ -212,7 +212,7 @@ function Index() {
                       Trascina qui il tuo archivio
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">
-                      oppure clicca per sceglierlo · CBZ, ZIP
+                      oppure clicca per sceglierlo · CBZ, ZIP, CBR, RAR
                     </div>
                   </div>
                 )}
