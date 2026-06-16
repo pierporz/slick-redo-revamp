@@ -155,7 +155,7 @@ export async function convertArchive(
   onArchiveProgress?.(1, 1);
   onLog?.(`[STEP] Generazione PDF (${added} pagine)...`);
   const pdfBlob = pdf.output("blob");
-  const baseName = file.name.replace(/\.(cbz|zip)$/i, "");
+  const baseName = file.name.replace(/\.(cbz|zip|cbr|rar)$/i, "");
   onLog?.(`[OK] PDF pronto: ${baseName}.pdf`);
   return { pdfBlob, filename: `${baseName}.pdf`, pages: added };
 }
