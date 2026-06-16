@@ -87,6 +87,7 @@
     background-image: var(--gradient-mesh);
     background-attachment: fixed;
     min-height: 100vh;
+  }
 }
 
 /* Theme: Sunset — warm light/cream with coral & amber */
@@ -147,7 +148,6 @@
     radial-gradient(at 50% 100%, oklch(0.78 0.2 200 / 0.25) 0px, transparent 50%);
   --shadow-glow: 0 0 50px oklch(0.72 0.28 330 / 0.5);
   --shadow-elevated: 0 30px 80px -20px oklch(0 0 0 / 0.7);
-}
 }
 
 @layer utilities {
