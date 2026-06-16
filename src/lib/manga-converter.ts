@@ -2,12 +2,13 @@ import JSZip from "jszip";
 import { jsPDF } from "jspdf";
 import wasmUrl from "node-unrar-js/dist/js/unrar.wasm?url";
 
-export type DeviceTarget = "generic" | "kindle" | "kobo" | "ipad" | "tablet7";
+export type DeviceTarget = "generic" | "kindle" | "kobo" | "ipad" | "tablet7" | "remarkable2";
 
 export const DEVICE_SIZES: Record<DeviceTarget, { w: number; h: number; label: string }> = {
   generic: { w: 1200, h: 1800, label: "Generic (A4-ish)" },
   kindle: { w: 1072, h: 1448, label: "Kindle Paperwhite" },
   kobo: { w: 1264, h: 1680, label: "Kobo Libra" },
+  remarkable2: { w: 1404, h: 1872, label: "reMarkable 2" },
   ipad: { w: 1536, h: 2048, label: "iPad" },
   tablet7: { w: 800, h: 1280, label: "Tablet 7\"" },
 };
